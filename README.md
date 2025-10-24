@@ -1,21 +1,32 @@
 # RNA-seq-DESeq-Workflow
 A workflow for analysis of paired-end RNA-seq data and differential gene expression analysis.
 
-## Overview
+## Requirements
 
-**Pipeline: fastp → STAR → RSEM → DESeq2**
+* **fastp** | https://anaconda.org/bioconda/fastp$0
+* **STAR** | https://anaconda.org/bioconda/star$0
+* **RSEM** | https://github.com/deweylab/RSEM$0
+* **DESeq2** (R) | https://bioconductor.org/packages/release/bioc/html/DESeq2.html$0
+
+* **Assembly FASTA file:**
+ https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/GRCh38.primary_assembly.genome.fa.gz$0
+
+* **Annotation GTF file:**
+https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_46/gencode.v46.annotation.gtf.gz$0
+
+## Overview
 
 
 The pipeline uses **SLURM HPC** for alignment & quantification and **local R** for DESeq2.
 
-1. QC and Trimming | fastp | HPC & local |
-2. Build STAR index | STAR | HPC |
-3. Read alignment | STAR | HPC |
-4. Build RSEM reference | RSEM | HPC |
-5. Quantification | RSEM | HPC |
-6. Differential Expression | DESeq2 | Local R |
+1. QC and Trimming with fastp on HPC or locally.
+2. Build STAR index with STAR on HPC.
+3. Read alignment with STAR on HPC.
+4. Build RSEM reference with RSEM on HPC.
+5. Quantification with RSEM on HPC.
+6. Differential Expression with DESeq2 on local R.
 
-## Step 1: QC and Trimming with fastp
+## Step 1: QC and Trimming with fastp on HPC or locally
 
 Locate to the directory containing the raw read files and run fastp with the code below: 
 
@@ -26,10 +37,6 @@ fastp -i <forward_read_file>_R1.fastq.gz -I <reverse_read_file>_R2.fastq.gz -o <
 ```
 
 ## Step 2: Build STAR index (on HPC)
-
-Assembly .fa file: GRCh38.primary_assembly.genome.fa
-
-Annotation gtf file: gencode.v46.annotation.gtf
 
 ```
 #!/bin/bash
@@ -181,4 +188,3 @@ done
 ```
 
 ## Step 6: Differential Expression Analysis with DESeq2 on R (local)
-
