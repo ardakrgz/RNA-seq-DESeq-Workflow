@@ -27,9 +27,7 @@ A workflow for analysis of paired-end RNA-seq data and differential gene express
 
     * https://www.gencodegenes.org/human/$0
 
--or-
-
-Download via wget: 
+    * or download via wget: 
 ```
 # The FASTA genome file (release 49 up-to-date as of Oct 2025)
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/GRCh38.primary_assembly.genome.fa.gz
