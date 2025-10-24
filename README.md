@@ -322,7 +322,7 @@ sig_results <- results_cleaned[
 write.csv(sig_results, file.path(dir, "deseq_sig_results.csv"))
 
 
-### -------- Visualization (Optional) --------
+### -------- Visualization with Heatmap (Optional) --------
 library(pheatmap)
 
 vsd <- vst(dds, blind = FALSE)
