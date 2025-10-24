@@ -115,7 +115,7 @@ A star genome directory (~30 GB) will be generated, which contains necessary inf
 By following the **additional step** above, one can run this STAR step as the following:
 
 ```
-touch star_index.sh #create the script
+touch star_index.sh #create a blank text file
 
 nano star_index.sh #a blank file will open, copy the script above and configure 
 
