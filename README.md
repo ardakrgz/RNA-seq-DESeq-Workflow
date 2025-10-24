@@ -5,28 +5,27 @@ A workflow for analysis of paired-end RNA-seq data and differential gene express
 
 * **fastp**
 
-GitHub Repo: https://github.com/OpenGene/fastp$0
+    * GitHub Repo: https://github.com/OpenGene/fastp$0
 
-
-Anaconda Download: https://anaconda.org/bioconda/fastp$0
+    * Anaconda Download: https://anaconda.org/bioconda/fastp$0
 
 * **STAR**
 
-GitHub Repo: https://github.com/alexdobin/STAR/tree/master$0
+    * GitHub Repo: https://github.com/alexdobin/STAR/tree/master$0
 
-Anaconda Download: https://anaconda.org/bioconda/star$0
+    * Anaconda Download: https://anaconda.org/bioconda/star$0
 
 * **RSEM**
 
-GitHub Repo: https://github.com/deweylab/RSEM$0
+    * GitHub Repo: https://github.com/deweylab/RSEM$0
 
 * **DESeq2** (R)
 
-https://bioconductor.org/packages/release/bioc/html/DESeq2.html$0
+    * https://bioconductor.org/packages/release/bioc/html/DESeq2.html$0
 
 * **Assembly FASTA and annotation GTF files:** 
 
-https://www.gencodegenes.org/human/$0
+    * https://www.gencodegenes.org/human/$0
 
 -or-
 
