@@ -3,21 +3,47 @@ A workflow for analysis of paired-end RNA-seq data and differential gene express
 
 ## Requirements
 
-* **fastp** | https://anaconda.org/bioconda/fastp$0
-* **STAR** | https://anaconda.org/bioconda/star$0
-* **RSEM** | https://github.com/deweylab/RSEM$0
-* **DESeq2** (R) | https://bioconductor.org/packages/release/bioc/html/DESeq2.html$0
+* **fastp**
 
-* **Assembly FASTA file,** release 49 up-to-date as of Oct 2025.
- https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/GRCh38.primary_assembly.genome.fa.gz$0
+GitHub Repo: https://github.com/OpenGene/fastp$0
 
-* **Annotation GTF file,** release 46 up-to-date as of Oct 2025.
-https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_46/gencode.v46.annotation.gtf.gz$0
+
+Anaconda Download: https://anaconda.org/bioconda/fastp$0
+
+* **STAR**
+
+GitHub Repo: https://github.com/alexdobin/STAR/tree/master$0
+
+Anaconda Download: https://anaconda.org/bioconda/star$0
+
+* **RSEM**
+
+GitHub Repo: https://github.com/deweylab/RSEM$0
+
+* **DESeq2** (R)
+
+https://bioconductor.org/packages/release/bioc/html/DESeq2.html$0
+
+* **Assembly FASTA and annotation GTF files:** 
+
+https://www.gencodegenes.org/human/$0
+
+-or-
+
+Download via wget: 
+```
+# The FASTA genome file (release 49 up-to-date as of Oct 2025)
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/GRCh38.primary_assembly.genome.fa.gz
+
+# The GTF annotation file (release 49 up-to-date as of Oct 2025)
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/gencode.v49.annotation.gtf.gz
+```
+
 
 ## Overview
 
 
-The pipeline uses **SLURM HPC** for alignment & quantification and **local R** for DESeq2.
+The pipeline uses **SLURM HPC** for alignment & quantification and **local R** for differential expression analysis and further visualization.
 
 1. QC and Trimming with fastp on HPC or locally.
 2. Build STAR index with STAR on HPC.
@@ -34,9 +60,24 @@ Locate to the directory containing the raw read files and run fastp with the cod
 ```
 cd /path/to/raw/reads
 
-fastp -i <forward_read_file>_R1.fastq.gz -I <reverse_read_file>_R2.fastq.gz -o <forward_read_trimmed>_R1_trimmed.fq.gz -O <reverse_read_trimmed>_R2_trimmed.fq.gz -P 10 --thread 5 -h <fastp_report>_fastp.html
+fastp -i <forward_read>_R1.fastq.gz -I <reverse_read>_R2.fastq.gz \
+    -o <fwd_out>_R1_trimmed.fq.gz -O <rev_out>_R2_trimmed.fq.gz \
+    -P 10 --thread 5 -h <fastp_report>_fastp.html
 ```
 At the end, trimmed.fq.gz files will be generated, which will be used in **step 3.** Additionally, an **html report** will be generated, which contains general information of the reads, before and after statistics, and filtering results.
+
+## Additional: Running jobs on SLURM
+Job scripts that are going to be run on HPC can be prepared and run as the following:
+
+```
+touch <example_script>.sh #create a blank text file
+
+nano <example_script>.sh #open the blank file, copy-paste and modify the script
+
+sbatch <example_script>.sh #submit the script to the cluster
+```
+
+If configured right, the script will be queued in the cluster, and information mail(s) will be sent to the configured mail adress.
 
 ## Step 2: Build STAR index (on HPC)
 
@@ -70,10 +111,20 @@ STAR \
   --genomeDir "$GENOME_DIR" \
   --genomeFastaFiles "$GENOME_FA" \
   --sjdbGTFfile "$GTF_FILE" \
-  --sjdbOverhang 100
-
+  --sjdbOverhang 100 # This value must be set to ReadLength - 1
 ```
 A star genome directory (~30 GB) will be generated, which contains necessary information of the genome and annotations. It can be used for other analyses with the same genome reference and annotation.
+
+By following the **additional step** above, one can run this STAR step as the following:
+
+```
+touch star_index.sh #create the script
+
+nano star_index.sh #a blank file will open, copy the script above and configure 
+
+sbatch star_index.sh #submit the script
+```
+
 
 ## Step 3: Read Alignment with STAR (on HPC)
 In this step, the trimmed read files are aligned to the reference genome generated in the second step.
@@ -283,7 +334,6 @@ vsd <- vst(dds, blind = FALSE)
 top_genes_ids <- rownames(head(results_cleaned[order(results_cleaned$padj), ], 30))
 
 # Subset the transformed count matrix to get the data for these top 30 genes
-# We remove the version number from the 'vsd' rownames to match our IDs
 vsd_matrix <- assay(vsd)
 rownames(vsd_matrix) <- gsub("\\..*", "", rownames(vsd_matrix))
 mat <- vsd_matrix[top_genes_ids, ]
@@ -307,5 +357,4 @@ pheatmap(
   color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdBu")))(100)
 )
 dev.off()
-
 ```
