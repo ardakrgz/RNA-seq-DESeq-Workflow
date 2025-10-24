@@ -197,8 +197,8 @@ source activate <your_environment>
 
 GENOME_FA=/path/to/genome/assembly/fa_file
 GTF_FILE=/path/to/annotation/gtf_file
-RSEM_REF=/path/to/RSEM/rsem_hg38_gencode46
-RSEM_BIN=/path/to/RSEM/software/RSEM-1.2.25 #if RSEM is not in $PATH
+RSEM_REF=/path/to/RSEM/ref
+RSEM_BIN=/path/to/RSEM/software/RSEM-<version> #if RSEM is not in $PATH
 
 STAR_PATH=/path/to/.conda/envs/your_environment/bin # useful in case RSEM can't locate STAR
 
@@ -236,8 +236,8 @@ module load anaconda
 source activate <your_environment>
 
 INPUT_DIR=/path/to/STAR/output/directory
-RSEM_REF=/path/to/RSEM/rsem_hg38_gencode46
-RSEM_BIN=/path/to/RSEM/software/RSEM-1.2.25 #if RSEM is not in $PATH
+RSEM_REF=/path/to/RSEM/ref
+RSEM_BIN=/path/to/RSEM/software/RSEM-<version> #if RSEM is not in $PATH
 THREADS=16
 
 #type sample names as they appear in the directory
